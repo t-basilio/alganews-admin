@@ -1,15 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+import reportWebVitals from './reportWebVitals';
+import { store } from './core/store';
+import DefaultLayout from './app/layouts/Default';
+import Routes from './app/routes';
+
+import '../src/index.css';
+
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <BrowserRouter>
+        <DefaultLayout>
+          <Routes />
+        </DefaultLayout>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
