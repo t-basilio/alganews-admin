@@ -25,6 +25,7 @@ import moment from 'moment';
 import NotFoundError from '../components/NotFoundError';
 import usePageTitle from '../../core/hooks/usePageTitle';
 import formatPhone from '../../core/utils/formatPhone';
+import DoubleConfirm from '../components/DoubleConfirm';
 
 export default function UserDetailsView() {
   usePageTitle('Detalhes do usuário');
@@ -92,28 +93,27 @@ export default function UserDetailsView() {
             <Link to={`/usuarios/edicao/${user.id}`}>
               <Button type='primary'>Editar perfil</Button>
             </Link>
-            <Popconfirm
-              title={user.active ? `Desabilitar ${user.name}` : `Habilitar ${user.name}`}
-              onConfirm={() => {
-                confirm({
-                  title: `Tem certeza que deseja ${
-                    user.active ? `Desabilitar ${user.name}?` : `Habilitar ${user.name}?`
-                  }`,
-
-                  content: user.active
-                    ? 'Desabilitar um usuário fará com que ele seja automaticamente desligado da plataforma, podendo causar prejuízos em seus ganhos.'
-                    : 'Habilitar um usuário fará com que ele ganhe acesso a plataforma novamente, possibilitando criação e publicação de posts.',
-
-                  onOk() {
-                    toggleUserStatus(user).then(() => {
-                      fetchUser(Number(params.id));
-                    });
-                  },
-                });
-              }}
+            <DoubleConfirm
+              popConfirmTitle={
+                user.active ? `Desabilitar ${user.name}` : `Habilitar ${user.name}`
+              }
+              modalCancelLabel='Cancelar'
+              modalTitle={`Tem certeza que deseja ${
+                user.active ? `Desabilitar ${user.name}?` : `Habilitar ${user.name}?`
+              }`}
+              modalContent={
+                user.active
+                  ? 'Desabilitar um usuário fará com que ele seja automaticamente desligado da plataforma, podendo causar prejuízos em seus ganhos.'
+                  : 'Habilitar um usuário fará com que ele ganhe acesso a plataforma novamente, possibilitando criação e publicação de posts.'
+              }
+              onConfim={() =>
+                toggleUserStatus(user).then(() => {
+                  fetchUser(Number(params.id));
+                })
+              }
             >
               <Button type='primary'>{user.active ? 'Desabilitar' : 'Habilitar'}</Button>
-            </Popconfirm>
+            </DoubleConfirm>
           </Space>
         </Space>
       </Col>

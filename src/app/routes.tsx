@@ -11,6 +11,7 @@ import CustomError from 't-basilio-sdk/dist/CustomError';
 import { message, notification } from 'antd';
 import UserEditView from './view/UserEdit.view';
 import UserDetailsView from './view/UserDetails.view';
+import PaymentDetailsView from './view/PaymentDetails.view';
 
 export default function Routes() {
   useEffect(() => {
@@ -47,6 +48,7 @@ export default function Routes() {
       <Route path={'/usuarios/:id'} exact component={UserDetailsView} />
       <Route path={'/pagamentos'} exact component={PaymentListView} />
       <Route path={'/pagamentos/cadastro'} exact component={PaymentCreateView} />
+      <Route path={'/pagamentos/:id'} exact component={PaymentDetailsView} />
       <Route path={'/fluxo-de-caixa/despesas'} exact component={CashFlowExpensesView} />
       <Route path={'/fluxo-de-caixa/receitas'} exact component={CashFlowRevenuesView} />
     </Switch>

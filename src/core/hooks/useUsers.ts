@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../store';
 import * as UserActions from '../store/User.reducer';
@@ -9,6 +9,10 @@ export default function useUsers() {
 
   const users = useSelector((state: RootState) => state.user.list);
   const fetching = useSelector((state: RootState) => state.user.fetching);
+
+  const editors = useMemo(() => {
+    return users.filter((user) => user.role === 'EDITOR')
+  },[users]);
 
   const fetchUsers = useCallback(() => {
     dispatch(UserActions.getAllUsers());
@@ -27,5 +31,6 @@ export default function useUsers() {
     fetchUsers,
     fetching,
     toggleUserStatus,
+    editors
   };
 }

@@ -1,4 +1,3 @@
-import { hover } from '@testing-library/user-event/dist/hover';
 import { useCallback, useState } from 'react';
 
 type CurrencyInputProps = Omit<
@@ -24,7 +23,7 @@ export default function CurrencyInput(props: CurrencyInputProps) {
 
   return (
     <input
-      className='ant-input css-dev-only-do-not-override-1x0dypw ant-input-outlined'
+      className='ant-input css-dev-only-do-not-override-vtv7iz ant-input-outlined'
       value={inputValue}
       onChange={(e) => {
         const { value } = e.currentTarget;

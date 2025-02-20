@@ -2,24 +2,30 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-
+import { ConfigProvider } from 'antd';
+import ptBR from 'antd/lib/locale/pt_BR';
 import reportWebVitals from './reportWebVitals';
 import { store } from './core/store';
 import DefaultLayout from './app/layouts/Default';
 import Routes from './app/routes';
-
 import '../src/index.css';
+import moment from 'moment';
+import 'moment/locale/pt-br';
+
+moment.locale('pt-br')
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <DefaultLayout>
-          <Routes />
-        </DefaultLayout>
-      </BrowserRouter>
-    </Provider>
+    <ConfigProvider locale={ptBR}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <DefaultLayout>
+            <Routes />
+          </DefaultLayout>
+        </BrowserRouter>
+      </Provider>
+    </ConfigProvider>
   </React.StrictMode>
 );
 

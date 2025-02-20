@@ -2301,6 +2301,18 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/lodash.debounce@^4.0.9":
+  version "4.0.9"
+  resolved "https://registry.yarnpkg.com/@types/lodash.debounce/-/lodash.debounce-4.0.9.tgz#0f5f21c507bce7521b5e30e7a24440975ac860a5"
+  integrity sha512-Ma5JcgTREwpLRwMM+XwBR7DaWe96nC38uCBDFKZWbNKD+osjVzdpnUSwBcqCptrp16sSOLBAUb50Car5I0TCsQ==
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.17.14"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.17.14.tgz#bafc053533f4cdc5fcc9635af46a963c1f3deaff"
+  integrity sha512-jsxagdikDiDBeIRaPYtArcT8my4tN1og7MtMRquFT3XNA6axxyHDRUemqDz/taRDdOUn0GnGHRCuff4q48sW9A==
+
 "@types/mime@^1":
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-1.3.5.tgz#1ef302e01cf7d2b5a0fa526790c9123bf1d06690"
@@ -9973,10 +9985,10 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-t-basilio-sdk@^6.5.0:
-  version "6.5.0"
-  resolved "https://registry.yarnpkg.com/t-basilio-sdk/-/t-basilio-sdk-6.5.0.tgz#39d2c64ce532db7055bdb283b43c74eae532d59f"
-  integrity sha512-s0c7ldWaeOEywYNAdsxE2TXss3CNjXeXSty5ZLAT66kPc5jfdb0XtaxDUp4H0UNkMAkGphsUxtjeXHgVhjIyVw==
+t-basilio-sdk@6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/t-basilio-sdk/-/t-basilio-sdk-6.5.1.tgz#234f75fa8bf8a8869a956041bf824b969d468bcb"
+  integrity sha512-S45FVA5wsdCZmgYh3FqbwOqn4cBYpnEPEYzNMIIq81sfbkrp+TqjFkRzht9urSyik/N/DlUdsihrWrmySeRe4A==
   dependencies:
     axios "^1.7.7"
     date-fns "^3.6.0"
