@@ -7,7 +7,6 @@ import {
   Col,
   Descriptions,
   Divider,
-  Popconfirm,
   Progress,
   Row,
   Skeleton,
@@ -18,7 +17,6 @@ import {
 } from 'antd';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import { Link, Redirect, useParams } from 'react-router-dom';
-import confirm from 'antd/lib/modal/confirm';
 import { Post } from 't-basilio-sdk';
 import useUserPosts from '../../core/hooks/usePosts';
 import moment from 'moment';

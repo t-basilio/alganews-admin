@@ -1,9 +1,6 @@
 import {
   createAsyncThunk,
   createSlice,
-  isFulfilled,
-  isPending,
-  isRejected,
   PayloadAction,
 } from '@reduxjs/toolkit';
 import { Payment, PayrollService } from 't-basilio-sdk';
@@ -96,13 +93,13 @@ const PaymentSlice = createSlice({
     ]);
     
     builder
-      .addMatcher(success, (state, action) => {
+      .addMatcher(success, (state) => {
         state.fetching = false;
       })
-      .addMatcher(error, (state, action) => {
+      .addMatcher(error, (state) => {
         state.fetching = false;
       })
-      .addMatcher(loading, (state, action) => {
+      .addMatcher(loading, (state) => {
         state.fetching = true;
       });
   },

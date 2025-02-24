@@ -1,4 +1,4 @@
-import { Layout, ConfigProvider, theme } from 'antd';
+import { Layout, ConfigProvider } from 'antd';
 import Breadcrumb from './Breadcrumb';
 import DefaultLayoutHeader from './Header';
 import DefaultLayoutSidebar from './Sidebar';

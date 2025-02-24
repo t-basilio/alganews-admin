@@ -31,7 +31,12 @@ export default function Routes() {
           });
         }
       } else {
-        notification.error({ message: 'Houve um erro' });
+       
+        reason?.data?.objects.forEach((object: { userMessage: string }) => {
+          message.error(object.userMessage);
+        });
+        
+        notification.error({ message: reason?.message || 'Houve um erro' });
       }
     };
     return () => {
