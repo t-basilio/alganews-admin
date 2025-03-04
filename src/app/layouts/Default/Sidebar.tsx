@@ -3,19 +3,59 @@ import {
   FallOutlined,
   HomeOutlined,
   LaptopOutlined,
+  MenuOutlined,
   PlusCircleOutlined,
   RiseOutlined,
   TableOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Menu, Layout } from 'antd';
+import { Menu, Layout, Drawer, DrawerProps, Button } from 'antd';
+import { SiderProps } from 'antd/lib/layout';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
+import { useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import logo from '../../../assets/Logo.svg';
 
 const { Sider } = Layout;
 
 export default function DefaultLayoutSidebar() {
+  const { lg } = useBreakpoint();
+
   const history = useHistory();
   const location = useLocation();
+
+  const [show, setShow] = useState(false);
+
+  const SideBarWrapper: React.FC = useMemo(() => (lg ? Sider : Drawer), [lg]);
+
+  const siderProps = useMemo((): SiderProps => {
+    return {
+      width: 200,
+      className: 'site-layout-background no-print',
+    };
+  }, []);
+
+  const drawerProps = useMemo((): DrawerProps => {
+    return {
+      open: show,
+      closable: true,
+      title: (
+        <>
+          <img alt={'logo alga news'} src={logo} />
+        </>
+      ),
+      styles: { header: { padding: '17px 17px' }, body: { padding: 0 } },
+      onClose() {
+        setShow(false);
+      },
+      placement: 'left',
+      width: 230,
+    };
+  }, [show]);
+
+  const sidebarProps = useMemo(() => {
+    return lg ? siderProps : drawerProps;
+  }, [lg, siderProps, drawerProps]);
 
   const menuItems = [
     {
@@ -86,21 +126,31 @@ export default function DefaultLayoutSidebar() {
     },
   ];
 
-
   return (
-    <Sider
-      width={200}
-      className='site-layout-background no-print'
-      breakpoint='lg'
-      collapsedWidth='0'
-    >
-      <Menu
-        items={menuItems}
-        mode='inline'
-        defaultSelectedKeys={[location.pathname]}
-        defaultOpenKeys={[location.pathname.split('/')[1]]}
-        style={{ height: '100%', borderRight: 0 }}
-       />
-    </Sider>
+    <>
+      {!lg && (
+        <Button
+          icon={<MenuOutlined />}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            height: 64,
+            zIndex: 99,
+            border: 'none',
+          }}
+          onClick={() => setShow(true)}
+        />
+      )}
+      <SideBarWrapper {...sidebarProps}>
+        <Menu
+          items={menuItems}
+          mode='inline'
+          defaultSelectedKeys={[location.pathname]}
+          defaultOpenKeys={[location.pathname.split('/')[1]]}
+          style={{ height: '100%', borderRight: 0 }}
+        />
+      </SideBarWrapper>
+    </>
   );
 }

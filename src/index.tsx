@@ -12,6 +12,8 @@ import '../src/index.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
+import './auth/httpConfig'
+
 moment.locale('pt-br')
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

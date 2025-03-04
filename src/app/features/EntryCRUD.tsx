@@ -66,6 +66,7 @@ export default function EntryCRUD({ type }: EntryCRUDProps) {
         closeIcon={null}
         open={showCategoryModal}
         onCancel={closeCategoryModal}
+        title={'Gerenciar categorias'}
         footer={null}
         destroyOnClose
       >

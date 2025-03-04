@@ -22,6 +22,7 @@ import MaskedInput from 'antd-mask-input';
 import { Moment } from 'moment';
 import { useHistory } from 'react-router-dom';
 import CurrencyInput from '../components/CurrencyInput';
+import useAuth from '../../core/hooks/useAuth';
 
 type UserFormType = {
   createdAt: Moment;
@@ -42,6 +43,7 @@ export default function UserForm(props: UserFormProps) {
   const [avatar, setAvatar] = useState(props.user?.avatarUrls.default || '');
   const [activeTab, setActiveTab] = useState<'personal' | 'bankAccount'>('personal');
 
+  const { user: authenticatedUser } = useAuth();
   const [isEditorRole, setIsEditorRole] = useState(props.user?.role === 'EDITOR');
 
   const handleAvatarUpload = useCallback(
@@ -121,7 +123,11 @@ export default function UserForm(props: UserFormProps) {
                 },
               ]}
             >
-              <MaskedInput placeholder={'(27) 99999-0000'} mask='(00) 00000-0000' />
+              <MaskedInput
+                disabled={props.user && !props.user?.canSensitiveDataBeUpdated}
+                placeholder={'(27) 99999-0000'}
+                mask='(00) 00000-0000'
+              />
             </Form.Item>
           </Col>
           <Col xs={24} lg={8}>
@@ -466,6 +472,7 @@ export default function UserForm(props: UserFormProps) {
             ]}
           >
             <Select
+              disabled={props.user && !props.user?.canSensitiveDataBeUpdated}
               onChange={(value) => {
                 setIsEditorRole(value === 'EDITOR');
               }}
@@ -473,7 +480,12 @@ export default function UserForm(props: UserFormProps) {
             >
               <Select.Option value={'EDITOR'}>Editor</Select.Option>
               <Select.Option value={'ASSISTANT'}>Assistente</Select.Option>
-              <Select.Option value={'MANAGER'}>Gerente</Select.Option>
+              <Select.Option
+                disabled={authenticatedUser?.role !== 'MANAGER'}
+                value={'MANAGER'}
+              >
+                Gerente
+              </Select.Option>
             </Select>
           </Form.Item>
         </Col>
@@ -489,7 +501,11 @@ export default function UserForm(props: UserFormProps) {
               },
             ]}
           >
-            <Input type='email' placeholder='E.g.: contato@joão.silva' />
+            <Input
+              disabled={props.user && !props.user?.canSensitiveDataBeUpdated}
+              type='email'
+              placeholder='E.g.: contato@joão.silva'
+            />
           </Form.Item>
         </Col>
         <Col sm={24}>

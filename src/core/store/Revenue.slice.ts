@@ -28,10 +28,14 @@ const initialState: RevenueState = {
 
 export const getRevenues = createAsyncThunk(
   'cash-flow/revenues/getRevenues',
-  async (_, { getState, dispatch }) => {
-    const { query } = (getState() as RootState).cashFlow.revenue;
-    const revenues = await CashFlowService.getAllEntries(query);
-    await dispatch(storeList(revenues));
+  async (_, { getState, dispatch, rejectWithValue }) => {
+    try {
+      const { query } = (getState() as RootState).cashFlow.revenue;
+      const revenues = await CashFlowService.getAllEntries(query);
+      await dispatch(storeList(revenues));
+    } catch (err: any) {
+      return rejectWithValue({ ...err });
+    }
   }
 );
 
@@ -42,7 +46,7 @@ export const createRevenue = createAsyncThunk(
       await CashFlowService.insertNewEntry(revenue);
       await dispatch(getRevenues());
     } catch (error: any) {
-      return rejectWithValue({...error}) 
+      return rejectWithValue({ ...error });
     }
   }
 );

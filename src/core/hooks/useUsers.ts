@@ -15,7 +15,7 @@ export default function useUsers() {
   },[users]);
 
   const fetchUsers = useCallback(() => {
-    dispatch(UserActions.getAllUsers());
+    return dispatch(UserActions.getAllUsers()).unwrap();
   }, [dispatch]);
 
   const toggleUserStatus = useCallback(

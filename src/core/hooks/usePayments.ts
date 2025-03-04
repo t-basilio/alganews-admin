@@ -24,7 +24,7 @@ export default function usePayments() {
   );
 
   const fetchPayments = useCallback(
-    () => dispatch(PaymentActions.getAllPayments()),
+    () => dispatch(PaymentActions.getAllPayments()).unwrap(),
     [dispatch]
   );
  

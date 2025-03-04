@@ -24,15 +24,17 @@ import NotFoundError from '../components/NotFoundError';
 import usePageTitle from '../../core/hooks/usePageTitle';
 import formatPhone from '../../core/utils/formatPhone';
 import DoubleConfirm from '../components/DoubleConfirm';
+import useBreadcrumb from '../../core/hooks/useBreadcrumb';
 
 export default function UserDetailsView() {
   usePageTitle('Detalhes do usuário');
+  const { user, fetchUser, notFound, toggleUserStatus } = useUser();
+  useBreadcrumb(`Usuário/${user?.name || 'Detalhes'}`);
 
   const params = useParams<{ id: string }>();
   const [page, setPage] = useState(0);
   const { lg } = useBreakpoint();
 
-  const { user, fetchUser, notFound, toggleUserStatus } = useUser();
   const { posts, fetchUserPosts, togglePostStatus, loadingFetch, loadingToggle } =
     useUserPosts();
 
@@ -110,7 +112,15 @@ export default function UserDetailsView() {
                 })
               }
             >
-              <Button type='primary'>{user.active ? 'Desabilitar' : 'Habilitar'}</Button>
+              <Button
+                disabled={
+                  (user.active && !user.canBeDeactivated) ||
+                  (!user.active && user.canBeActivated)
+                }
+                type='primary'
+              >
+                {user.active ? 'Desabilitar' : 'Habilitar'}
+              </Button>
             </DoubleConfirm>
           </Space>
         </Space>
