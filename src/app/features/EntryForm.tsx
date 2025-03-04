@@ -17,6 +17,7 @@ import moment, { Moment } from 'moment';
 import { useForm } from 'antd/lib/form/Form';
 import useEntriesCategories from '../../core/hooks/useEntriesCategories';
 import useCashFlow from '../../core/hooks/useCashFlow';
+import Forbidden from '../components/Forbidden';
 
 type EntryFormSubmit = Omit<CashFlow.EntryInput, 'transactedOn'> & {
   transactedOn: Moment;
@@ -32,12 +33,20 @@ interface EntryFormProps {
 export default function EntryForm({ type, onSuccess, editingEntry, onCancel }: EntryFormProps) {
   const [form] = useForm();
   const [loading, setLoading] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
+
   const { revenues, expenses, fetching, fetchCategories } = useEntriesCategories();
 
   const { createEntry, fetching: fetchingEntries, updateEntry } = useCashFlow(type);
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategories().catch(err => {
+      if (err?.data?.status === 403) {
+        setForbidden(true);
+        return;
+      }
+      throw err;
+    });
   }, [fetchCategories]);
 
   useEffect(() => {
@@ -74,6 +83,9 @@ export default function EntryForm({ type, onSuccess, editingEntry, onCancel }: E
     [type, createEntry, onSuccess, editingEntry, updateEntry]
   );
 
+  if (forbidden)
+    return <Forbidden />
+  
   return loading ? (
     <>
       <Skeleton />

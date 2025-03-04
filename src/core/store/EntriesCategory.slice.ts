@@ -16,20 +16,23 @@ const initialState: EntriesCategoryState = {
 
 export const getCategories = createAsyncThunk(
   'cash-flow/categories/getCategories',
-  async (_, { dispatch }) => {
-    const categories = await CashFlowService.getAllCategories({
-      sort: ['id', 'desc'],
-    });
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      const categories = await CashFlowService.getAllCategories({
+        sort: ['id', 'desc'],
+      });
+      /**
+       * using local filter because API doesn't has segregate category service by type
+       * @todo: update this code when API is going to changed.
+       */
+      const expensesCategories = categories.filter((c) => c.type === 'EXPENSE');
+      const revenuesCategories = categories.filter((c) => c.type === 'REVENUE');
 
-    /**
-     * using local filter because API doesn't has segregate category service by type
-     * @todo: update this code when API is going to changed.
-     */
-    const expensesCategories = categories.filter((c) => c.type === 'EXPENSE');
-    const revenuesCategories = categories.filter((c) => c.type === 'REVENUE');
-
-    await dispatch(storeExpenses(expensesCategories));
-    await dispatch(storeRevenues(revenuesCategories));
+      await dispatch(storeExpenses(expensesCategories));
+      await dispatch(storeRevenues(revenuesCategories));
+    } catch (err: any) {
+      return rejectWithValue({ ...err });
+    }
   }
 );
 

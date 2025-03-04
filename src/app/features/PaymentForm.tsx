@@ -21,7 +21,7 @@ import { useForm } from 'antd/es/form/Form';
 import { DeleteOutlined, InfoCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import CurrencyInput from '../components/CurrencyInput';
 import { useCallback, useEffect, useState } from 'react';
-import { Descriptions } from 'antd/lib';
+import Descriptions from 'antd/lib/descriptions';
 import { FieldData } from 'rc-field-form/lib/interface';
 import debounce from 'lodash.debounce';
 import usePayment from '../../core/hooks/usePayment';
@@ -49,7 +49,12 @@ export default function PaymentForm() {
   const [paymentPreviewError, setPaymentPreviewError] = useState<CustomError>();
 
   useEffect(() => {
-    fetchUsers();
+    fetchUsers().catch(err => {
+      if (err?.data?.status === 403) {
+        return;
+      }
+      throw err;
+    });
   }, [fetchUsers]);
 
   const updateScheduledDate = useCallback(() => {

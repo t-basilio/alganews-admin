@@ -12,20 +12,37 @@ import {
 import { CashFlow } from 't-basilio-sdk';
 import useEntriesCategories from '../../core/hooks/useEntriesCategories';
 import { useCallback, useEffect, useState } from 'react';
-import { CheckCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  CheckCircleOutlined,
+  DeleteOutlined,
+  ReloadOutlined,
+  PlusCircleOutlined,
+} from '@ant-design/icons';
+import Forbidden from '../components/Forbidden';
+import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 
 export default function EntryCategoryManager(props: { type: 'EXPENSE' | 'REVENUE' }) {
+  const { xs } = useBreakpoint();
   const { expenses, fetchCategories, revenues, deleteCategory, fetching } =
     useEntriesCategories();
 
   const [showCreationModal, setShowCreationModal] = useState(false);
+  const [forbidden, setForbidden] = useState(false);
 
   const openCreationModal = useCallback(() => setShowCreationModal(true), []);
   const closeCreationModal = useCallback(() => setShowCreationModal(false), []);
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategories().catch((err) => {
+      if (err?.data?.status === 403) {
+        setForbidden(true);
+        return;
+      }
+      throw err;
+    });
   }, [fetchCategories]);
+
+  if (forbidden) return <Forbidden />;
 
   return (
     <>
@@ -48,8 +65,16 @@ export default function EntryCategoryManager(props: { type: 'EXPENSE' | 'REVENUE
       </Modal>
 
       <Row justify={'space-between'} style={{ marginBottom: 16 }}>
-        <Button onClick={fetchCategories}>Atualizar categorias</Button>
-        <Button onClick={openCreationModal}>Adcionar categoria</Button>
+        <Button icon={<ReloadOutlined />} onClick={fetchCategories}>
+          {xs ? 'Atualizar' : 'Atualizar categorias'}
+        </Button>
+        <Button
+          icon={<PlusCircleOutlined />}
+          type={'primary'}
+          onClick={openCreationModal}
+        >
+          {xs ? 'Adcionar' : 'Adcionar categoria'}
+        </Button>
       </Row>
       <Table<CashFlow.CategorySummary>
         size={'small'}

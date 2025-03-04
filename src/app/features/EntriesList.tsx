@@ -1,12 +1,13 @@
 import { Button, Card, DatePicker, Descriptions, Space, Table, Tag } from 'antd';
 import { CashFlow } from 't-basilio-sdk';
 import useCashFlow from '../../core/hooks/useCashFlow';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import moment from 'moment';
 import { DeleteOutlined, EyeOutlined, EditOutlined } from '@ant-design/icons';
 import formatToBrl from '../../core/utils/formatToBrl';
 import DoubleConfirm from '../components/DoubleConfirm';
 import { useHistory, useLocation } from 'react-router-dom';
+import Forbidden from '../components/Forbidden';
 
 interface EntriesListProps {
   onEdit: (entryId: number) => any;
@@ -18,6 +19,7 @@ export default function EntriesList(props: EntriesListProps) {
   const { type } = props;
   const location = useLocation();
   const history = useHistory();
+  const [forbidden, setForbidden] = useState(false);
 
   const {
     entries,
@@ -32,7 +34,13 @@ export default function EntriesList(props: EntriesListProps) {
   const didMount = useRef(false);
 
   useEffect(() => {
-    fetchEntries();
+    fetchEntries().catch(err => {
+      if (err?.data?.status === 403) {
+        setForbidden(true);
+        return;
+      }
+      throw err;
+    });
   }, [fetchEntries]);
 
   useEffect(() => {
@@ -45,6 +53,9 @@ export default function EntriesList(props: EntriesListProps) {
     }
   }, [location.search, setQuery]);
 
+  if (forbidden) 
+    return <Forbidden />
+  
   return (
     <Table<CashFlow.EntrySummary>
       dataSource={entries}
@@ -110,6 +121,7 @@ export default function EntriesList(props: EntriesListProps) {
                     size={'small'}
                     onClick={() => props.onEdit(record.id)}
                     icon={<EditOutlined />}
+                    disabled={!record.canBeEdited}
                   />
                   <Button
                     type={'text'}
@@ -208,6 +220,7 @@ export default function EntriesList(props: EntriesListProps) {
                   size={'small'}
                   onClick={() => props.onEdit(id)}
                   icon={<EditOutlined />}
+                  disabled={!record.canBeEdited}
                 />
                 <Button
                   type={'text'}

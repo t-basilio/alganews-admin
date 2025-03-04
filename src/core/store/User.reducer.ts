@@ -14,8 +14,13 @@ interface UserState {
 
 export const getAllUsers = createAsyncThunk(
   'user/getAllUsers',
-  async () => await UserService.getAllUsers({})
-);
+  async (_, { rejectWithValue }) => {
+    try {
+      return await UserService.getAllUsers({});
+    } catch (err: any) {
+      return rejectWithValue({ ...err });
+    }
+});
 
 export const toggleUserStatus = createAsyncThunk(
   'user/toggleUserStatus',

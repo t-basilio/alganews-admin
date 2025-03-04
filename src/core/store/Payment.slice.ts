@@ -34,12 +34,16 @@ const initialState: PaymentState = {
 
 export const getAllPayments = createAsyncThunk(
   'payment/getAllPayments',
-  async (_, { getState, dispatch }) => {
+  async (_, { getState, dispatch, rejectWithValue }) => {
     const {
       payment: { query },
     } = getState() as RootState;
-    const paymentPaginated = await PayrollService.getAllPayments(query);
-    await dispatch(storeList(paymentPaginated));
+    try {
+      const paymentPaginated = await PayrollService.getAllPayments(query);
+      return dispatch(storeList(paymentPaginated));
+    } catch (err: any) {
+      return rejectWithValue({ ...err })
+    }
   }
 );
 

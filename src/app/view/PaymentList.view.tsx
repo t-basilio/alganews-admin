@@ -13,15 +13,20 @@ import {
 import { EyeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Payment } from 't-basilio-sdk';
 import usePayments from '../../core/hooks/usePayments';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { SorterResult } from 'antd/lib/table/interface';
 import moment from 'moment';
 import useBreakpoint from 'antd/lib/grid/hooks/useBreakpoint';
 import DoubleConfirm from '../components/DoubleConfirm';
 import { Link } from 'react-router-dom';
+import Forbidden from '../components/Forbidden';
+import useBreadcrumb from '../../core/hooks/useBreadcrumb';
 
 export default function PaymentListView() {
+  useBreadcrumb('Pagamentos/Consulta');
   const { xs } = useBreakpoint();
+  const [forbidden, setForbidden] = useState(false);
+  
   const {
     payments,
     fetching,
@@ -35,9 +40,18 @@ export default function PaymentListView() {
   } = usePayments();
 
   useEffect(() => {
-    fetchPayments();
+    fetchPayments().catch(err => {
+      if (err?.data?.status === 403) {
+        setForbidden(true);
+        return;
+      }
+      throw err;
+    });
   }, [fetchPayments]);
 
+  if (forbidden)
+    return <Forbidden />
+  
   return (
     <>
       <Row justify={'space-between'} gutter={24}>

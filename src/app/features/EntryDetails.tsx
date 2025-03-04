@@ -1,4 +1,3 @@
-import { logDOM } from '@testing-library/react';
 import { Descriptions, Skeleton } from 'antd';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';

@@ -4,16 +4,19 @@ import UserForm from '../features/UserForm';
 import { Card, Skeleton } from 'antd';
 import { User, UserService } from 't-basilio-sdk';
 import moment from 'moment';
-import { notification } from 'antd/lib';
+import notification from 'antd/lib/notification';
 import { Redirect, useHistory, useParams } from 'react-router-dom';
 import NotFoundError from '../components/NotFoundError';
 import usePageTitle from '../../core/hooks/usePageTitle';
+import useBreadcrumb from '../../core/hooks/useBreadcrumb';
 
 export default function UserEditView() {
-  usePageTitle('Edição do usuário')
+  usePageTitle('Edição do usuário');
+  useBreadcrumb('Usuário/Edição');
+  
   const params = useParams<{ id: string }>();
-
   const { user, fetchUser, notFound } = useUser();
+
   const history = useHistory();
 
   useEffect(() => {
@@ -33,16 +36,16 @@ export default function UserEditView() {
     return <Redirect to={'/usuarios'} />;
   }
 
- if (notFound)
-   return (
-     <Card>
-       <NotFoundError
-         title={'Usuário não encontrado'}
-         actionDestination={'/usuarios'}
-         actionTitle={'Voltar para lista de usuários'}
-       />
-     </Card>
-   );
+  if (notFound)
+    return (
+      <Card>
+        <NotFoundError
+          title={'Usuário não encontrado'}
+          actionDestination={'/usuarios'}
+          actionTitle={'Voltar para lista de usuários'}
+        />
+      </Card>
+    );
 
   async function handleUserUpdate(user: User.Input) {
     await UserService.updateExistingUser(Number(params.id), user).then(() => {

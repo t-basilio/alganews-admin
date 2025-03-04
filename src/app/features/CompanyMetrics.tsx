@@ -2,20 +2,35 @@ import { useEffect, useState } from 'react';
 import { MetricService } from 't-basilio-sdk';
 import { Line } from 'react-chartjs-2';
 import { Typography } from 'antd';
+
 import transformDataIntoAntdChart from '../../core/utils/transformDataIntoAntdChart';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale/pt-BR';
+import { ForbiddenError } from 't-basilio-sdk/dist/errors';
+import Forbidden from '../components/Forbidden';
 
 export default function CompanyMetrics() {
   const { Title } = Typography;
 
   const [data, setData] = useState<Chart.ChartData>();
 
+  const [forbidden, setForbidden] = useState(false);
+
   useEffect(() => {
     MetricService.getMonthlyRevenuesExpenses()
       .then(transformDataIntoAntdChart)
-      .then(setData);
+      .then(setData)
+      .catch(err => {
+        if (err instanceof ForbiddenError) {
+          setForbidden(true);
+          return;
+        }
+        throw err;
+      })
   }, []);
+
+  if (forbidden)
+    return <Forbidden minHeight={256} />;
 
   const options: Chart.ChartOptions = {
     maintainAspectRatio: true,
