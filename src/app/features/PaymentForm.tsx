@@ -68,13 +68,16 @@ export default function PaymentForm() {
 
   const getPaymentPreview = useCallback(async () => {
     const { accountingPeriod, payee, bonuses } = form.getFieldsValue();
+
+    const FILTERED_BONUSES = bonuses?.filter(bonus => !!bonus.title && !!bonus.amount);
+
     if (payee && accountingPeriod) {
      if (payee.id && accountingPeriod.endsOn && accountingPeriod.startsOn) {
        try {
          await fetchPaymentPreview({
            payee,
            accountingPeriod,
-           bonuses: bonuses || [],
+           bonuses: FILTERED_BONUSES || [],
          });
          clearPaymentPreviewError();
        } catch (error) {
@@ -98,8 +101,8 @@ export default function PaymentForm() {
       if (Array.isArray(field?.name)) {
         if (
           field.name.includes('payee') ||
-          field.name.includes('_accountingPeriod') //||
-          //field.name.includes('bonuses') se inserir vai acionar esse bloco
+          field.name.includes('_accountingPeriod') ||
+          field.name.includes('bonuses') //se inserir vai acionar esse bloco
         ) {
           getPaymentPreview();
         }
@@ -152,7 +155,7 @@ export default function PaymentForm() {
             </Space>
           </Descriptions.Item>
           <Descriptions.Item label={'Agendamento'}>
-            {scheduledTo && moment(scheduledTo.toString()).format('DDD/MM/YYYY')}
+            {scheduledTo && moment(scheduledTo.toString()).format('DD/MM/YYYY')}
           </Descriptions.Item>
           <Descriptions.Item label={'Palavras'}>
             {paymentPreview?.earnings.words}
